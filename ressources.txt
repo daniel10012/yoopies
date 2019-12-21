@@ -1,0 +1,3 @@
+https://www.data.gouv.fr/en/datasets/salaire-net-horaire-moyen-selon-la-categorie-socioprofessionnelle-le-sexe-et-lage-en-2014/
+
+https://hackersandslackers.com/flask-sqlalchemy-database-models/
