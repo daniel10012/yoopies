@@ -1,3 +1,25 @@
 https://www.data.gouv.fr/en/datasets/salaire-net-horaire-moyen-selon-la-categorie-socioprofessionnelle-le-sexe-et-lage-en-2014/
 
 https://hackersandslackers.com/flask-sqlalchemy-database-models/
+
+https://www.geeksforgeeks.org/python-build-a-rest-api-using-flask/
+
+
+HTTP Method	    Resource URL	                            Notes
+GET	            /api/salaries/<CODGEO>	                    Return  salary info in a commune
+GET	            /api/salaries	                            Return the collection of salaries in all communes.
+POST	        /api/salaries	                            Register a new commune
+PUT	            /api/salaries/<CODEGEO>	                    Modify a commune salary data.
+
+
+JSON representation:
+
+{
+    "CODGEO": 123,
+    "LIBGEO": "orsay",
+    "Département": "indre",
+    "_links": {
+        "self": "/salaries/123",
+        "department": "/salaries/indre"     #virtual field
+    }
+}
