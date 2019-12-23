@@ -3,9 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from secrets import API_KEY
+from flask_cors import CORS, cross_origin
 
 # Create a new Flask application
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Set up SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sh14.db'
@@ -17,7 +21,7 @@ Base = declarative_base()
 Base.metadata.reflect(engine)
 
 # create a configured "Session" class
-Session = sessionmaker(bind=engine)
+Session = sessionmaker(bind=engine, autoflush=False)
 
 # create a Session
 session = Session()
@@ -37,6 +41,7 @@ class Salary(Base):
                 "LIBGEO": self.LIBGEO,
                 "Département": self.Département,
                 "SNHM14":self.SNHM14,
+                "Geo_Shape":self.Geo_Shape,
                 "_links": {
                     "self": url_for('get_salary', CODGEO=self.CODGEO),
                     "department": f"/salaries/{self.Département}"     #virtual field
@@ -45,7 +50,7 @@ class Salary(Base):
         return data
 
     def from_dict(self, data):
-        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14']:
+        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14', 'Geo_Shape']:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -74,6 +79,7 @@ def get_salary(CODGEO):
     return jsonify(session.query(Salary).filter_by(CODGEO=str(CODGEO)).first().to_dict())
 
 @app.route('/salaries', methods=['GET'])
+@cross_origin()
 def get_salaries():
     data = Salary.to_collection_dict()
     return jsonify(data)
@@ -111,3 +117,12 @@ def update_salary(CODGEO):
 @app.route('/', methods=['GET'])
 def index():
     return render_template("index.html")
+
+@app.route('/salaries/<int:CODGEO>/Geo_Shape', methods=['GET'])
+def get_geo(CODGEO):
+    return session.query(Salary).filter_by(CODGEO=str(CODGEO)).first().Geo_Shape
+
+@app.route('/viz', methods=['GET'])
+def viz():
+    src = "src=https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&callback=initMap"
+    return render_template("viz.html", src = src)

@@ -1,18 +1,19 @@
-{% extends "base.html" %}
-
-{% block title %}
-    Data
-{% endblock %}
-
-{% block main %}
-
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fetch API</title>
+</head>
+<body>
+      <button id="getData">GET DATA FROM LOCAL</button>
       <button id="getAPI">GET DATA FROM API </button>
       <p id="result"></p>
-
+      <p id="demo">YPPP</p>
 
 <script>
-
+        document.getElementById('getData').addEventListener('click', getData);
         document.getElementById('getAPI').addEventListener('click', getAPI);
 
         // Get info from local file
@@ -30,7 +31,7 @@
                 const { CODGEO, LIBGEO, SNHM14} = user
                 result +=
                     `<div>
-                     <h5> ${LIBGEO} </h5>
+                     <h5> LIBGEO: ${LIBGEO} </h5>
                          <ul class="w3-ul">
                              <li> CODGEO : ${CODGEO}</li>
                              <li> SNHM14 : ${SNHM14} </li>
@@ -43,5 +44,5 @@
 
 </script>
 
-{% endblock %}
-
+</body>
+</html>
