@@ -7,7 +7,8 @@
 {% block main %}
 
 
-      <button id="getAPI">GET DATA FROM API </button>
+      <button id="getAPI"> Display all Communes Salary Info </button>
+
       <p id="result"></p>
 
 
@@ -37,6 +38,7 @@
                          </ul>
                       </div>`;
                         document.getElementById('result').innerHTML = result;
+                        document.getElementById("getAPI").style.visibility = "hidden";
                     });
                 })
         }

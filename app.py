@@ -2,23 +2,37 @@ from flask import Flask, jsonify, request, url_for, render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker
 from secrets import API_KEY
 from flask_cors import CORS, cross_origin
+import requests
+import urllib.request, json
+import json
+import pprint
 
 # Create a new Flask application
 app = Flask(__name__)
+
+# Handle the Cross-origin resource sharing for API calls
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Set up SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sh14.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # an Engine, which the Session will use for connection resources
-engine = create_engine('sqlite:///sh14.db', convert_unicode=True, echo=False)
+engine = create_engine('sqlite:///sh14.db', convert_unicode=True, echo=False, connect_args={'check_same_thread': False})
+
 Base = declarative_base()
 Base.metadata.reflect(engine)
+
+# enables query on the model
+db_session = scoped_session(sessionmaker(autocommit=False,
+                                             autoflush=False,
+                                             bind=engine))
+Base.query = db_session.query_property()
 
 # create a configured "Session" class
 Session = sessionmaker(bind=engine, autoflush=False)
@@ -41,6 +55,29 @@ class Salary(Base):
                 "LIBGEO": self.LIBGEO,
                 "Département": self.Département,
                 "SNHM14":self.SNHM14,
+                "SNHMC14": self.SNHMC14,
+                "SNHMP14": self.SNHMP14,
+                "SNHME14": self.SNHME14,
+                "SNHMO14": self.SNHMO14,
+                "SNHMF14": self.SNHMF14,
+                "SNHMFC14": self.SNHMFC14,
+                "SNHMFP14": self.SNHMFP14,
+                "SNHMFE14": self.SNHMFE14,
+                "SNHMFO14": self.SNHMFO14,
+                "SNHMH14": self.SNHMH14,
+                "SNHMHC14": self.SNHMHC14,
+                "SNHMHP14": self.SNHMHP14,
+                "SNHMHE14": self.SNHMHE14,
+                "SNHMHO14": self.SNHMHO14,
+                "SNHM1814": self.SNHM1814,
+                "SNHM2614": self.SNHM2614,
+                "SNHM5014": self.SNHM5014,
+                "SNHMF1814": self.SNHMF1814,
+                "SNHMF2614": self.SNHMF2614,
+                "SNHMF5014": self.SNHMF5014,
+                "SNHMH1814": self.SNHMH1814,
+                "SNHMH2614": self.SNHMH2614,
+                "SNHMH5014": self.SNHMH5014,
                 "Geo_Shape":self.Geo_Shape,
                 "_links": {
                     "self": url_for('get_salary', CODGEO=self.CODGEO),
@@ -50,7 +87,7 @@ class Salary(Base):
         return data
 
     def from_dict(self, data):
-        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14', 'Geo_Shape']:
+        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14', 'Geo_Shape', 'SNHMC14', 'SNHMP14', 'SNHME14', 'SNHMO14', 'SNHMF14', 'SNHMFC14', 'SNHMFP14', 'SNHMFE14', 'SNHMFO14', 'SNHMH14', 'SNHMHC14', 'SNHMHP14', 'SNHMHE14', 'SNHMHO14', 'SNHM1814', 'SNHM2614', 'SNHM5014', 'SNHMF1814', 'SNHMF2614', 'SNHMF5014', 'SNHMH1814', 'SNHMH2614', 'SNHMH5014']:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -125,4 +162,48 @@ def get_geo(CODGEO):
 @app.route('/viz', methods=['GET'])
 def viz():
     src = "src=https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&callback=initMap"
-    return render_template("viz.html", src = src)
+    return render_template("viz.html", src=src)
+
+
+@app.route('/detail', methods=['GET', 'POST'])
+def detail():
+    if request.method == "POST":
+        gender = request.form['gender']
+        age = request.form['age']
+        profession = request.form['profession']
+        department = request.form['department']
+        base = "SNHM"
+        detail = base + gender + profession + age + "14"
+        if detail not in ['SNHM14','SNHMC14', 'SNHMP14', 'SNHME14', 'SNHMO14', 'SNHMF14', 'SNHMFC14', 'SNHMFP14', 'SNHMFE14', 'SNHMFO14', 'SNHMH14', 'SNHMHC14', 'SNHMHP14', 'SNHMHE14', 'SNHMHO14', 'SNHM1814', 'SNHM2614', 'SNHM5014', 'SNHMF1814', 'SNHMF2614', 'SNHMF5014', 'SNHMH1814', 'SNHMH2614', 'SNHMH5014']:
+            return "data not available"
+        else:
+            r = requests.get('http://127.0.0.1:5000/salaries')
+            data = r.json()
+
+            salaries = data["items"]
+            sum = 0
+            count = 0
+
+            if department != "all":
+                for salary in salaries:
+                    if salary["CODGEO"][:2] == department:
+                        try:
+                            sum += float(salary[detail])
+                        except TypeError:
+                            sum += 0
+                        count += 1
+            else:
+                for salary in salaries:
+                    try:
+                        sum += float(salary[detail])
+                    except TypeError:
+                        sum += 0
+                    count += 1
+
+            average = round(sum/count,2)
+            return render_template("result.html", average=average)
+
+    else:
+        # Get a list of all departements
+        departments = sorted(list(set([CODGEO[0][:2] for CODGEO in session.query(Salary.CODGEO)])))
+        return render_template("detail.html", departments=departments)

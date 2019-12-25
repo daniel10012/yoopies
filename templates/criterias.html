@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Salaries by Categories
+{% endblock %}
+
+{% block main %}
+
+    <form action="/dept" method="get">
+        <input autocomplete="off" autofocus name="q" placeholder="Query" type="text">
+        <input type="submit" value="Search">
+    </form>
+
+
+
+{% endblock %}

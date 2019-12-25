@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Salaries by Department
+{% endblock %}
+
+{% block main %}
+
+    <form action="/detail" method="post">
+        <fieldset class="form-group" id=gridRadios1">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="z" value="" checked>
+                                <label class="form-check-label" for="z">
+                                    All genders
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="a" value="H" >
+                                <label class="form-check-label" for="a">
+                                    Male
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="gender" id="b" value="F">
+                                <label class="form-check-label" for="b">
+                                    Female
+                                </label>
+                        </div>
+                    </div>
+            </div>
+        </fieldset>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Age</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="age" id="y" value="" checked >
+                                <label class="form-check-label" for="y">
+                                    All ages
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="age" id="c" value="18" >
+                                <label class="form-check-label" for="c">
+                                    18-25
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="age" id="d" value="26">
+                                <label class="form-check-label" for="d">
+                                    26-50
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="age" id="e" value="50">
+                                <label class="form-check-label" for="e">
+                                    > 50
+                                </label>
+                        </div>
+                    </div>
+            </div>
+        </fieldset>
+        <fieldset class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Profession</legend>
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="profession" id="x" value="" checked>
+                                <label class="form-check-label" for="x">
+                                    All professions
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="profession" id="f" value="C" >
+                                <label class="form-check-label" for="f">
+                                    Cadre
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="profession" id="g" value="P">
+                                <label class="form-check-label" for="g">
+                                    Intermediare
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="profession" id="h" value="E">
+                                <label class="form-check-label" for="h">
+                                    Employe
+                                </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="profession" id="i" value="O">
+                                <label class="form-check-label" for="i">
+                                    Ouvrier
+                                </label>
+                        </div>
+                    </div>
+            </div>
+        </fieldset>
+        <div class="form-group">
+            <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Department</legend>
+                    <div class="col-sm-1">
+                        <select class="form-control" id="exampleFormControlSelect1" name="department">
+                              <option>all</option>
+                              {% for department in departments %}
+                              <option>{{department}}</option>
+                              {% endfor %}
+                        </select>
+                    </div>
+            </div>
+        </div>
+        <br>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Get Average Salary</button>
+            </div>
+        </div>
+    </form>
+
+
+
+{% endblock %}
