@@ -3,12 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-from secrets import API_KEY
+#from secrets import API_KEY
 from flask_cors import CORS, cross_origin
 import requests
 import urllib.request, json
 import json
 import pprint
+import pandas as pd
+import folium
 
 # Create a new Flask application
 app = Flask(__name__)
@@ -79,6 +81,7 @@ class Salary(Base):
                 "SNHMH2614": self.SNHMH2614,
                 "SNHMH5014": self.SNHMH5014,
                 "Geo_Shape":self.Geo_Shape,
+                "geo_point_2d":self.geo_point_2d,
                 "_links": {
                     "self": url_for('get_salary', CODGEO=self.CODGEO),
                     "department": f"/salaries/{self.Département}"     #virtual field
@@ -87,7 +90,7 @@ class Salary(Base):
         return data
 
     def from_dict(self, data):
-        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14', 'Geo_Shape', 'SNHMC14', 'SNHMP14', 'SNHME14', 'SNHMO14', 'SNHMF14', 'SNHMFC14', 'SNHMFP14', 'SNHMFE14', 'SNHMFO14', 'SNHMH14', 'SNHMHC14', 'SNHMHP14', 'SNHMHE14', 'SNHMHO14', 'SNHM1814', 'SNHM2614', 'SNHM5014', 'SNHMF1814', 'SNHMF2614', 'SNHMF5014', 'SNHMH1814', 'SNHMH2614', 'SNHMH5014']:
+        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14', 'Geo_Shape', 'geo_point_2d', 'SNHMC14', 'SNHMP14', 'SNHME14', 'SNHMO14', 'SNHMF14', 'SNHMFC14', 'SNHMFP14', 'SNHMFE14', 'SNHMFO14', 'SNHMH14', 'SNHMHC14', 'SNHMHP14', 'SNHMHE14', 'SNHMHO14', 'SNHM1814', 'SNHM2614', 'SNHM5014', 'SNHMF1814', 'SNHMF2614', 'SNHMF5014', 'SNHMH1814', 'SNHMH2614', 'SNHMH5014']:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -159,10 +162,34 @@ def index():
 def get_geo(CODGEO):
     return session.query(Salary).filter_by(CODGEO=str(CODGEO)).first().Geo_Shape
 
+@app.route('/salaries/<int:CODGEO>/geo_point_2d', methods=['GET'])
+def get_geopoint(CODGEO):
+    return jsonify(session.query(Salary).filter_by(CODGEO=str(CODGEO)).first().geo_point_2d)
+
+@app.route('/salaries/geo_point_2d', methods=['GET'])
+def get_all_geopoint():
+    allpoints = [geopoint for geopoint  in session.query(Salary.geo_point_2d)]
+    print(allpoints)
+    return jsonify(allpoints)
+
 @app.route('/viz', methods=['GET'])
 def viz():
-    src = "src=https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&callback=initMap"
-    return render_template("viz.html", src=src)
+    df = pd.read_sql_table("t", engine)
+    # getting coordinates for all salaries
+    geo_points = [el for el in df.geo_point_2d][:-3]
+    # transforming to latlon format
+    latlon = [tuple(x.split(",")) for x in geo_points]
+    salaries = list(df.SNHM14)[:-3]
+
+    mapit = folium.Map(location=[48.9, 2.4], zoom_start=10)
+    count = 0
+    for coord in latlon:
+        folium.Marker(location=[coord[0], coord[1]], icon=folium.DivIcon(
+                          html=f"""<div style="font-family: courier new; color: {'red' if float(salaries[count]) < 15 else 'green' if float(salaries[count]) < 22 else 'blue'}">{"{:.0f}".format(float(salaries[count]))}</div>""")).add_to(mapit)
+        count += 1
+    mapit.save('templates/map.html')
+
+    return render_template("map.html")
 
 
 @app.route('/detail', methods=['GET', 'POST'])
@@ -207,3 +234,7 @@ def detail():
         # Get a list of all departements
         departments = sorted(list(set([CODGEO[0][:2] for CODGEO in session.query(Salary.CODGEO)])))
         return render_template("detail.html", departments=departments)
+
+@app.route('/jsfront', methods=['GET'])
+def jsfront():
+    return render_template("jsfront.html")

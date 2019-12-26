@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Data
+{% endblock %}
+
+{% block main %}
+
+
+      <button id="getAPI"> Display all Communes Salary Info </button>
+
+      <p id="result"></p>
+
+
+<script>
+
+        document.getElementById('getAPI').addEventListener('click', getAPI);
+
+        // Get info from local file
+        function getData(){
+            // code to execute local file
+        }
+
+        // Get info from API endpoint
+        function getAPI(){
+            fetch('http://127.0.0.1:5000/salaries')
+        .then((res) => { return res.json() })
+        .then((data) => {
+            let result = `<h2> Salaries info </h2>`;
+            data.items.forEach((user) => {
+                const { CODGEO, LIBGEO, SNHM14} = user
+                result +=
+                    `<div>
+                     <h5> ${LIBGEO} </h5>
+                         <ul class="w3-ul">
+                             <li> CODGEO : ${CODGEO}</li>
+                             <li> SNHM14 : ${SNHM14} </li>
+                         </ul>
+                      </div>`;
+                        document.getElementById('result').innerHTML = result;
+                        document.getElementById("getAPI").style.visibility = "hidden";
+                    });
+                })
+        }
+
+</script>
+
+{% endblock %}
+
