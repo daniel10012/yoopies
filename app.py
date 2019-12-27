@@ -213,6 +213,7 @@ def detail():
 
             if department != "all":
                 for salary in salaries:
+                    # Departement is the first two numbers of the GEOCODE
                     if salary["CODGEO"][:2] == department:
                         try:
                             sum += float(salary[detail])
