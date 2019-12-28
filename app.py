@@ -130,7 +130,7 @@ def get_salaries():
 def create_salary():
     data = request.get_json() or {}
     if 'CODGEO' not in data or 'LIBGEO' not in data or 'Département' not in data or 'SNHM14' not in data:
-        return 'must include CODGEO, LIBGEO and Département fields'
+        return 'must include CODGEO, LIBGEO and Département fields and SNHM14'
     if (session.query(Salary).filter_by(CODGEO=data["CODGEO"]).first() or session.query(Salary).filter_by(LIBGEO=data["LIBGEO"]).first()):
         return 'this commune already exists'
     salary = Salary()
@@ -153,6 +153,13 @@ def update_salary(CODGEO):
     salary.from_dict(data)
     db.session.commit()
     return jsonify(salary.to_dict())
+
+# Delete a salary
+@app.route('/salaries/<int:CODGEO>', methods=['DELETE'])
+def delete_salary(CODGEO):
+    salary = session.query(Salary).filter_by(CODGEO=str(CODGEO)).delete()
+    db.session.commit()
+    return jsonify("salary deleted")
 
 @app.route('/', methods=['GET'])
 def index():
