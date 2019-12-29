@@ -129,8 +129,8 @@ def get_salaries():
 @app.route('/salaries', methods=['POST'])
 def create_salary():
     data = request.get_json() or {}
-    if 'CODGEO' not in data or 'LIBGEO' not in data or 'Département' not in data or 'SNHM14' not in data:
-        return 'must include CODGEO, LIBGEO and Département fields and SNHM14'
+    if 'CODGEO' not in data or 'LIBGEO' not in data or 'Département' not in data or 'SNHM14' not in data or 'geo_point_2d' not in data:
+        return 'must include CODGEO, LIBGEO, Département, SNHM14 and geo_point fields'
     if (session.query(Salary).filter_by(CODGEO=data["CODGEO"]).first() or session.query(Salary).filter_by(LIBGEO=data["LIBGEO"]).first()):
         return 'this commune already exists'
     salary = Salary()
@@ -157,7 +157,8 @@ def update_salary(CODGEO):
 # Delete a salary
 @app.route('/salaries/<int:CODGEO>', methods=['DELETE'])
 def delete_salary(CODGEO):
-    salary = session.query(Salary).filter_by(CODGEO=str(CODGEO)).delete()
+    #Salary.query.filter_by(CODGEO=str(CODGEO)).delete()
+    session.query(Salary).filter_by(CODGEO=str(CODGEO)).delete()
     db.session.commit()
     return jsonify("salary deleted")
 
@@ -175,18 +176,18 @@ def get_geopoint(CODGEO):
 
 @app.route('/salaries/geo_point_2d', methods=['GET'])
 def get_all_geopoint():
-    allpoints = [geopoint for geopoint  in session.query(Salary.geo_point_2d)]
-    print(allpoints)
+    allpoints = [geopoint for geopoint in session.query(Salary.geo_point_2d)]
     return jsonify(allpoints)
 
 @app.route('/viz', methods=['GET'])
 def viz():
     df = pd.read_sql_table("t", engine)
     # getting coordinates for all salaries
-    geo_points = [el for el in df.geo_point_2d][:-3]
+    geo_points = [el for el in df.geo_point_2d]
     # transforming to latlon format
+    print(geo_points)
     latlon = [tuple(x.split(",")) for x in geo_points]
-    salaries = list(df.SNHM14)[:-3]
+    salaries = list(df.SNHM14)
 
     mapit = folium.Map(location=[48.9, 2.4], zoom_start=10)
     count = 0

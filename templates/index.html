@@ -6,8 +6,57 @@
 
 {% block main %}
 
+<h2>API documentation</h2>
+<ul><li>Docs available<a href="https://documenter.getpostman.com/view/6947361/SWLb8ouT?version=latest"> here</a></li></ul>
+<br>
 
-Hello
+<h2>Tabs</h2>
+<br>
+<ul>
+    <li><b>Flask Client</b></li> transacts directly with the database
+
+    <li><b>JS Client</b></li> shows a JavaScript front end that makes calls to the API
+
+    <li><b>Viz</b></li> shows the median hourly salary for each commune available: red if < 15euros/h, green if < 22eur/h, blue if > 22eur/h
+
+    <li><b>All Data JSON</b> </li>shows all the data available in a JSON format
+</ul>
+
+<h2>Explore Endpoints</h2>
+
+
+<br>
+    <h6>/GET METHOD</h6>
+    <ul>
+        <li><a href="http://127.0.0.1:5000/salaries">All Salaries</a></li>
+        <li><a href="http://127.0.0.1:5000/salaries/75101">Specific Commune Salary (ex for GEOCODE 75101)</a></li>
+        <li><a href="http://127.0.0.1:5000/salaries/75101/Geo_Shape">Specific Commune Geo Shape (ex for GEOCODE 75101)</a></li>
+        <li><a href="http://127.0.0.1:5000/salaries/geo_point_2d">All coordinates of communes</a></li>
+
+    </ul>
+
+    <h6>/POST METHOD</h6>
+    <ul>
+   <li><a href="http://127.0.0.1:5000/salaries">Post a new salary for a commune </a></li>
+<i><small>body has to contain a JSON including the GEOCODE (zip), LIBGEO (commune name), SNHM14 (average salary) and geo_point_2d (coordinates)</small></i>
+    </ul>
+
+    <h6>/PUT METHOD</h6>
+    <ul>
+
+            <li><a href="http://127.0.0.1:5000/salaries/75101">Update the salary info for a specific commune</a></li>
+      <i><small>body has to contain a JSON of the changing fields. CODGEO and LIBGEO cannot be changed</small></i>
+    </ul>
+
+<h6>/DELETE METHOD</h6>
+    <ul>
+
+            <li><a href="http://127.0.0.1:5000/salaries/75101">Delete the entire salary info for a specific commune</a></li>
+
+    </ul>
+
+<br>
+
 
 {% endblock %}
 

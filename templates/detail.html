@@ -5,7 +5,15 @@
 {% endblock %}
 
 {% block main %}
-
+<div class="text-center">
+<h2>Flask Template Frontend</h2>
+</div>
+</p>
+<br>
+<p><ul>
+    <li>This page shows a form in a flask template. It will make queries directly to the database and doesn't use calls to the API.</li>
+    <li>Depending on the ressources available, this will display a median hourly salary in a departement for the categories selected, in euros</li></p>
+<br>
     <form action="/detail" method="post">
         <fieldset class="form-group" id=gridRadios1">
             <div class="row">

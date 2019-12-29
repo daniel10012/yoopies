@@ -10,6 +10,10 @@ https://www.codementor.io/@sheena/understanding-sqlalchemy-cheat-sheet-du107lawl
 
 http://ogre.adc4gis.com/      geojson to shapefile
 
+https://www.codementor.io/@garethdwyer/building-a-crud-application-with-flask-and-sqlalchemy-dm3wv7yu2
+
+https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
+
 
 HTTP Method	    Resource URL	                            Notes
 GET	            /api/salaries/<CODGEO>	                    Return  salary info in a commune
