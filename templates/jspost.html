@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+    JS Post
+{% endblock %}
+
+{% block main %}
+
+<p id="result"></p>
+
+
+<form  id="postData">
+
+    <div class="form-group row">
+        <label  class="col-sm-2 col-form-label">CODGEO (zip code)</label>
+            <div class="col-sm-10">
+                <input type="text" name="" id="CODGEO" placeholder="required" >
+            </div>
+    </div>
+
+    <div class="form-group row">
+        <label  class="col-sm-2 col-form-label">Departement (dicstrict name)</label>
+            <div class="col-sm-10">
+                <input type="text" name="" id="Departement" >
+            </div>
+    </div>
+
+    <div class="form-group row">
+        <label  class="col-sm-2 col-form-label">Geo_Shape</label>
+            <div class="col-sm-10">
+                <input type="text" name="" id="Geo_Shape" >
+            </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">LIBGEO (commune name)</label>
+            <div class="col-sm-10">
+                <input type="text" name="" id="LIBGEO" placeholder="required" >
+            </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">SNHM14 (hour salary 2014)</label>
+            <div class="col-sm-10">
+                <input type="text" name="" id="SNHM14" placeholder="required" >
+            </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="inputPassword" class="col-sm-2 col-form-label">Geo_Point (latitude,longitude)</label>
+            <div class="col-sm-10">
+                <input type="text" name="" id="geo_point_2d" placeholder="required" >
+            </div>
+    </div>
+
+        <br>
+        <input type="submit" value="Create Ressource">
+</form>
+
+
+
+<script>
+
+document.getElementById('postData').addEventListener('submit', postData);
+
+ function postData(event){
+            event.preventDefault();
+
+            let CODGEO = document.getElementById('CODGEO').value;
+            let LIBGEO = document.getElementById('LIBGEO').value;
+            let Departement = document.getElementById('Departement').value;
+            let SNHM14 = document.getElementById('SNHM14').value;
+            let Geo_Shape = document.getElementById('Geo_Shape').value;
+            let geo_point_2d = document.getElementById('geo_point_2d').value;
+
+
+            const data = {
+              "CODGEO": CODGEO,
+              "LIBGEO": LIBGEO,
+              "SNHM14": SNHM14,
+              "geo_point_2d": geo_point_2d
+              };
+
+            fetch('http://localhost:5000/salaries', {
+              method: 'POST',
+              body: JSON.stringify(data),
+              headers: {'Content-Type': 'application/json',}
+            })
+            .then(res => res.text())
+            .then(console.log)
+
+            document.getElementById("postData").style.visibility = "hidden";
+
+            document.getElementById('result').innerHTML = "Ressource Added";
+
+            }
+
+
+</script>
+
+
+{% endblock %}

@@ -12,14 +12,21 @@
       <p id="result"></p>
       <p id="demo">YPPP</p>
 
+      <form  id="postData">
+        <div>
+            <input type="text" name="" id="tittle">
+        </div>
+        <div>
+            <textarea name="" id="body" cols="20" rows="5"></textarea>
+        </div>
+        <input type="submit" value="SEND POST">
+      </form>
+
 <script>
-        document.getElementById('getData').addEventListener('click', getData);
+
         document.getElementById('getAPI').addEventListener('click', getAPI);
 
-        // Get info from local file
-        function getData(){
-            // code to execute local file
-        }
+
 
         // Get info from API endpoint
         function getAPI(){
@@ -27,8 +34,8 @@
         .then((res) => { return res.json() })
         .then((data) => {
             let result = `<h2> Salaries info </h2>`;
-            data.items.forEach((user) => {
-                const { CODGEO, LIBGEO, SNHM14} = user
+            data.items.forEach((salary) => {
+                const { CODGEO, LIBGEO, SNHM14} = salary
                 result +=
                     `<div>
                      <h5> LIBGEO: ${LIBGEO} </h5>

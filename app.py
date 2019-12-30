@@ -55,7 +55,7 @@ class Salary(Base):
         data = {
                 "CODGEO": self.CODGEO,
                 "LIBGEO": self.LIBGEO,
-                "Département": self.Département,
+                "Departement": self.Departement,
                 "SNHM14":self.SNHM14,
                 "SNHMC14": self.SNHMC14,
                 "SNHMP14": self.SNHMP14,
@@ -84,13 +84,13 @@ class Salary(Base):
                 "geo_point_2d":self.geo_point_2d,
                 "_links": {
                     "self": url_for('get_salary', CODGEO=self.CODGEO),
-                    "department": f"/salaries/{self.Département}"     #virtual field
+                    "department": f"/salaries/{self.Departement}"     #virtual field
                     }
                 }
         return data
 
     def from_dict(self, data):
-        for field in ['CODGEO', 'LIBGEO', 'Département','SNHM14', 'Geo_Shape', 'geo_point_2d', 'SNHMC14', 'SNHMP14', 'SNHME14', 'SNHMO14', 'SNHMF14', 'SNHMFC14', 'SNHMFP14', 'SNHMFE14', 'SNHMFO14', 'SNHMH14', 'SNHMHC14', 'SNHMHP14', 'SNHMHE14', 'SNHMHO14', 'SNHM1814', 'SNHM2614', 'SNHM5014', 'SNHMF1814', 'SNHMF2614', 'SNHMF5014', 'SNHMH1814', 'SNHMH2614', 'SNHMH5014']:
+        for field in ['CODGEO', 'LIBGEO', 'Departement','SNHM14', 'Geo_Shape', 'geo_point_2d', 'SNHMC14', 'SNHMP14', 'SNHME14', 'SNHMO14', 'SNHMF14', 'SNHMFC14', 'SNHMFP14', 'SNHMFE14', 'SNHMFO14', 'SNHMH14', 'SNHMHC14', 'SNHMHP14', 'SNHMHE14', 'SNHMHO14', 'SNHM1814', 'SNHM2614', 'SNHM5014', 'SNHMF1814', 'SNHMF2614', 'SNHMF5014', 'SNHMH1814', 'SNHMH2614', 'SNHMH5014']:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -129,8 +129,9 @@ def get_salaries():
 @app.route('/salaries', methods=['POST'])
 def create_salary():
     data = request.get_json() or {}
-    if 'CODGEO' not in data or 'LIBGEO' not in data or 'Département' not in data or 'SNHM14' not in data or 'geo_point_2d' not in data:
-        return 'must include CODGEO, LIBGEO, Département, SNHM14 and geo_point fields'
+    print(data)
+    if 'CODGEO' not in data or 'LIBGEO' not in data or 'SNHM14' not in data or 'geo_point_2d' not in data:
+        return 'must include CODGEO, LIBGEO, Departement, SNHM14 and geo_point fields'
     if (session.query(Salary).filter_by(CODGEO=data["CODGEO"]).first() or session.query(Salary).filter_by(LIBGEO=data["LIBGEO"]).first()):
         return 'this commune already exists'
     salary = Salary()
@@ -247,3 +248,11 @@ def detail():
 @app.route('/jsfront', methods=['GET'])
 def jsfront():
     return render_template("jsfront.html")
+
+@app.route('/jspost', methods=['GET'])
+def jspost():
+    return render_template("jspost.html")
+
+@app.route('/jsdelete', methods=['GET'])
+def jsdelete():
+    return render_template("jsdelete.html")

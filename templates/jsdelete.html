@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+    JS Delete
+{% endblock %}
+
+{% block main %}
+
+<p id="result"></p>
+
+<form id="deleteData">
+  <div class="form-group row">
+    <label for="CODGEO" class="col-sm-2 col-form-label">CODGEO</label>
+    <div class="col-sm-2">
+      <input class="form-control" id="CODGEO">
+    </div>
+  </div>
+    <br>
+        <input type="submit" value="Delete Ressource">
+</form>
+
+<script>
+
+document.getElementById('deleteData').addEventListener('submit', deleteData);
+
+ function deleteData(event){
+            event.preventDefault();
+
+            let CODGEO = document.getElementById('CODGEO').value;
+
+            const url = "http://localhost:5000/salaries/" + CODGEO
+
+            fetch(url, {
+              method: 'DELETE'
+            });
+
+            document.getElementById("deleteData").style.visibility = "hidden";
+
+            document.getElementById('result').innerHTML = "Ressource Deleted";
+
+            }
+
+ </script>
+
+
+
+
+{% endblock %}
