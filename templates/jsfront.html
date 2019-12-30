@@ -6,8 +6,8 @@
 
 {% block main %}
 
+        <button id="getAPI" class="btn btn-primary">Display all Communes Salary Info</button>
 
-      <button id="getAPI"> Display all Communes Salary Info </button>
 
       <p id="result"></p>
 
@@ -16,10 +16,7 @@
 
         document.getElementById('getAPI').addEventListener('click', getAPI);
 
-        // Get info from local file
-        function getData(){
-            // code to execute local file
-        }
+
 
         // Get info from API endpoint
         function getAPI(){
@@ -27,8 +24,8 @@
         .then((res) => { return res.json() })
         .then((data) => {
             let result = `<h2> Salaries info </h2>`;
-            data.items.forEach((user) => {
-                const { CODGEO, LIBGEO, SNHM14} = user
+            data.items.forEach((salary) => {
+                const { CODGEO, LIBGEO, SNHM14} = salary
                 result +=
                     `<div>
                      <h5> ${LIBGEO} </h5>

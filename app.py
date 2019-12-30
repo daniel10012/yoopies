@@ -256,3 +256,7 @@ def jspost():
 @app.route('/jsdelete', methods=['GET'])
 def jsdelete():
     return render_template("jsdelete.html")
+
+@app.route('/jsupdate', methods=['GET'])
+def jsupdate():
+    return render_template("jsupdate.html")

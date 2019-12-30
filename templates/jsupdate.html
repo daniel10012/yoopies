@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    JS Post
+    JS Update
 {% endblock %}
 
 {% block main %}
@@ -33,28 +33,28 @@
     </div>
 
     <div class="form-group row">
-        <label for="inputPassword" class="col-sm-2 col-form-label">LIBGEO (commune name)</label>
+        <label for="LIBGEO" class="col-sm-2 col-form-label">LIBGEO (commune name)</label>
             <div class="col-sm-10">
-                <input type="text" name="" id="LIBGEO" placeholder="required" >
+                <input type="text" name="" id="LIBGEO"  >
             </div>
     </div>
 
     <div class="form-group row">
-        <label for="inputPassword" class="col-sm-2 col-form-label">SNHM14 (hour salary 2014)</label>
+        <label for="SNHM14" class="col-sm-2 col-form-label">SNHM14 (hour salary 2014)</label>
             <div class="col-sm-10">
-                <input type="text" name="" id="SNHM14" placeholder="required" >
+                <input type="text" name="" id="SNHM14" >
             </div>
     </div>
 
     <div class="form-group row">
-        <label for="inputPassword" class="col-sm-2 col-form-label">Geo_Point (latitude,longitude)</label>
+        <label for="geo_point_2d" class="col-sm-2 col-form-label">Geo_Point (latitude,longitude)</label>
             <div class="col-sm-10">
-                <input type="text" name="" id="geo_point_2d" placeholder="required" >
+                <input type="text" name="" id="geo_point_2d"  >
             </div>
     </div>
 
         <br>
-        <button type="submit" class="btn btn-primary">Create Resource</button>
+        <button type="submit" class="btn btn-primary">Update Resource</button>
 </form>
 
 
@@ -81,8 +81,10 @@ document.getElementById('postData').addEventListener('submit', postData);
               "geo_point_2d": geo_point_2d
               };
 
-            fetch('http://localhost:5000/salaries', {
-              method: 'POST',
+            const url = "http://localhost:5000/salaries/" + CODGEO
+
+            fetch(url, {
+              method: 'PUT',
               body: JSON.stringify(data),
               headers: {'Content-Type': 'application/json',}
             })
@@ -91,7 +93,7 @@ document.getElementById('postData').addEventListener('submit', postData);
 
             document.getElementById("postData").style.visibility = "hidden";
 
-            document.getElementById('result').innerHTML = "Ressource Added";
+            document.getElementById('result').innerHTML = "Ressource Updated";
 
             }
 
