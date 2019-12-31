@@ -2,7 +2,7 @@
 
 The goal of this project is to serve data on average salaries in France and can be used for example for target marketing.
 The data we use is available as open data in  [csv](https://www.data.gouv.fr/en/datasets/salaire-net-horaire-moyen-selon-la-categorie-socioprofessionnelle-le-sexe-et-lage-en-2014/)  
-We build an API in flask with frontends serving endpoints in javascript.
+We build an API in flask with frontends consuming endpoints in javascript.
 Documentation for the API is available [here](https://documenter.getpostman.com/view/6947361/SWLb8ouT?version=latest) 
 
 ## Getting Started
