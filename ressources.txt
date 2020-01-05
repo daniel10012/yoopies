@@ -12,7 +12,7 @@ http://ogre.adc4gis.com/      geojson to shapefile
 
 https://www.codementor.io/@garethdwyer/building-a-crud-application-with-flask-and-sqlalchemy-dm3wv7yu2
 
-https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
+
 
 https://medium.com/free-code-camp/a-practical-es6-guide-on-how-to-perform-http-requests-using-the-fetch-api-594c3d91a547?
 
